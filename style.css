@@ -1,0 +1,117 @@
+:root{
+	/* 日间：莫兰迪浅绿色系（低饱和度、柔和） */
+	--bg: #f3f6f2;      /* 页面背景 */
+	--card: #f8faf7;    /* 卡片背景 */
+	--muted: #788b7a;   /* 次要文字 */
+	--accent: #7a9a7a;  /* 主色（按钮、高亮） */
+	--accent-2: #c8d7c7; /* 辅助/填充色 */
+	--shadow: 0 6px 18px rgba(27,36,27,0.06);
+}
+*{box-sizing:border-box;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+body{margin:0;background:linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);color:#0f172a;min-height:100vh}
+header{padding:20px;background:transparent}
+header{padding:20px;background:transparent;display:flex;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:20px;letter-spacing:0.2px}
+
+.header-left{display:flex;flex-direction:column}
+.header-right{display:flex;align-items:center;gap:10px}
+.theme-toggle{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:6px 8px;border-radius:8px;cursor:pointer;font-size:16px}
+.theme-toggle[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 6px 14px rgba(37,99,235,0.12)}
+main{padding:24px;max-width:1100px;margin:20px auto}
+.container{display:grid;grid-template-columns:1fr;gap:18px}
+.card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.form-section{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.form-section .filters{display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.filters label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+form label{display:flex;align-items:center;gap:10px;font-size:14px}
+.form-section form{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+input[type=date],input[type=number],input[type=search]{padding:10px 12px;border:1px solid #e6eefc;background:#fbfdff;border-radius:10px;min-width:180px}
+button{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:10px;cursor:pointer;box-shadow:0 6px 14px rgba(37,99,235,0.12)}
+button:hover{transform:translateY(-1px)}
+.actions{display:flex;gap:10px;align-items:center}
+.chart-section{padding:12px;border-radius:12px}
+.chart-wrap{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);padding:10px;border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,0.04)}
+.chart-section canvas{width:100%;display:block;height:auto}
+/* two-chart layout */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-card h3{margin:0 0 8px 0;font-size:14px;color:var(--muted)}
+
+@media (max-width:900px){
+	.charts-grid{grid-template-columns:1fr}
+}
+.table-section{overflow:auto}
+.table-section table{width:100%;border-collapse:collapse;background:transparent;border-radius:10px;overflow:hidden}
+thead th{background:linear-gradient(180deg,#f2f8ff,#f8fbff);padding:12px 10px;text-align:left;color:var(--muted);font-size:13px}
+thead th{cursor:pointer}
+thead th.sort-asc::after{content:' ▲';font-size:12px;color:var(--accent)}
+thead th.sort-desc::after{content:' ▼';font-size:12px;color:var(--accent)}
+thead th[data-key="delta"]{width:110px}
+tbody td{padding:12px;border-top:1px solid #f1f5f9;font-size:14px}
+tbody tr:nth-child(even){background:#fbfdff}
+.btn-del{background:#ef4444;padding:6px 10px;border-radius:8px}
+.small-muted{color:var(--muted);font-size:13px}
+
+@media (max-width:900px){
+	.chart-section canvas{height:auto}
+}
+
+@media (max-width:600px){
+	main{padding:12px}
+	.form-section{flex-direction:column;align-items:stretch}
+	input[type=date],input[type=number],input[type=search]{width:100%}
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+	:root{
+		--bg: #071025;
+		--card: #0b1220;
+		--muted: #9aa7bf;
+		--accent: #60a5fa;
+		--accent-2: #2b6cb0;
+		--shadow: 0 8px 24px rgba(2,6,23,0.6);
+	}
+	body{background:linear-gradient(180deg,#041223 0%, var(--bg) 100%);color:#e6eef8}
+	header h1{color:#e6eef8}
+	.card{background:linear-gradient(180deg,#071427,#071427)}
+	input[type=date],input[type=number],input[type=search]{background:#06111a;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
+	thead th{background:linear-gradient(180deg,#041428,#071427);color:var(--muted)}
+	tbody td{color:#e6eef8;border-top:1px solid rgba(255,255,255,0.03)}
+	.btn-del{background:#f87171}
+
+	/* 夜间：按钮使用浅灰色以降低饱和度，保持文本可读 */
+	button{background:#d5d7d7;color:#0b0b0c;border:1px solid rgba(255,255,255,0.06);box-shadow:none}
+}
+
+/* Manual theme overrides (class-based). Add to <body> as `theme-dark` or `theme-light` to force theme */
+body.theme-dark{
+	/* 夜间：深灰中性色 */
+	--bg: #0b0b0c;
+	--card: #111213;
+	--muted: #9ea199;
+	--accent: #7fb07f;
+	--accent-2: #5b7a5b;
+	--shadow: 0 8px 24px rgba(0,0,0,0.7);
+	background: linear-gradient(180deg,#0a0a0b 0%, var(--bg) 100%);
+	color: #e6e6e6;
+}
+body.theme-light{
+	/* 强化：日间莫兰迪绿 */
+	--bg: #f3f6f2;
+	--card: #f8faf7;
+	--muted: #788b7a;
+	--accent: #7a9a7a;
+	--accent-2: #c8d7c7;
+	--shadow: 0 6px 18px rgba(27,36,27,0.06);
+	background: linear-gradient(180deg, #f7faf6 0%, var(--bg) 100%);
+	color: #0f1710;
+}
+
+/* Ensure inputs/buttons adapt when forcing theme */
+body.theme-dark input[type=date],body.theme-dark input[type=number],body.theme-dark input[type=search]{background:#06111a;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
+body.theme-dark .card{background:linear-gradient(180deg,#071427,#071427)}
+body.theme-dark thead th{background:linear-gradient(180deg,#041428,#071427);color:var(--muted)}
+body.theme-dark tbody td{color:#e6eef8;border-top:1px solid rgba(255,255,255,0.03)}
+
+/* body.theme-dark 专门覆盖（class 强制模式） */
+body.theme-dark button{background:#d5d7d7;color:#0b0b0c;border:1px solid rgba(255,255,255,0.06);box-shadow:none}

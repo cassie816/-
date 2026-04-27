@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>登录 - 粉丝增量看板</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main style="max-width:400px;margin:80px auto;padding:20px;">
+      <section class="card">
+        <h2>请输入小红书账号名登录</h2>
+        <form id="loginForm">
+          <label>账号名 <input id="username" placeholder="例如: xiaohongshu_zhangsan" required /></label>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button type="submit">进入我的看板</button>
+            <a href="admin.html" style="align-self:center;color:var(--muted);">后台看板</a>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script>
+      const STORAGE_KEY = 'fanTrackerData'
+      const CURR_KEY = 'fanTrackerCurrentUser'
+      document.getElementById('loginForm').addEventListener('submit', e=>{
+        e.preventDefault()
+        const name = document.getElementById('username').value.trim()
+        if(!name) return alert('请输入账号名')
+        // ensure storage structure
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY)
+          let all = raw ? JSON.parse(raw) : {}
+          if(!all[name]) all[name] = []
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(all))
+          localStorage.setItem(CURR_KEY, name)
+          window.location.href = 'index.html'
+        }catch(err){alert('无法访问本地存储: '+err.message)}
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>每日粉丝增量看板</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <h1>每日粉丝增量看板</h1>
+        <div class="small-muted">记录与可视化每日粉丝与互动数据</div>
+      </div>
+      <div class="header-right">
+        <div class="user-info"><span id="currentUser"></span> <button id="logoutBtn" style="margin-left:8px">退出</button></div>
+        <button id="themeToggle" class="theme-toggle" aria-pressed="false" title="切换亮/暗模式">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+      <section class="form-section card">
+        <form id="entryForm">
+          <label>日期 <input type="date" id="date" required /></label>
+          <label>粉丝总数 <input type="number" id="followers" min="0" required /></label>
+          <label>点赞总数 <input type="number" id="likes" min="0" required /></label>
+          <button type="submit">添加 / 更新</button>
+        </form>
+        <div class="actions">
+          <button id="exportBtn">导出 JSON</button>
+          <button id="exportCsvBtn">导出 CSV</button>
+          <input type="file" id="importFile" accept="application/json" />
+          <button id="clearBtn">清空所有数据</button>
+        </div>
+        <div class="filters">
+          <label>开始日期 <input type="date" id="startDate" /></label>
+          <label>结束日期 <input type="date" id="endDate" /></label>
+          <label>搜索 (日期/粉丝) <input type="search" id="searchInput" placeholder="例如 2026-04" /></label>
+          <button id="resetFilters">重置筛选</button>
+        </div>
+      </section>
+
+      <section class="chart-section card chart-wrap">
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>每日粉丝增量</h3>
+            <canvas id="deltaChartFollowers" height="120"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>每日点赞增量</h3>
+            <canvas id="deltaChartLikes" height="120"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="table-section card">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th data-key="date">日期</th>
+              <th data-key="followers">粉丝</th>
+              <th data-key="likes">点赞</th>
+              <th data-key="delta">当日涨粉</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

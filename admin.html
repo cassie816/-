@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>后台看板 - 粉丝增量</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>后台看板</h1>
+      <div class="small-muted">查看所有用户使用数据</div>
+    </header>
+    <main style="padding:20px;max-width:1000px;margin:20px auto;">
+      <section class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2>用户汇总</h2>
+          <div>
+            <button id="exportAllCsv">导出汇总 CSV</button>
+            <button id="exportAllJson">导出所有 JSON</button>
+          </div>
+        </div>
+        <table id="adminTable" style="width:100%;margin-top:12px">
+          <thead>
+            <tr><th>用户名</th><th>首日</th><th>末日</th><th>粉丝增量</th><th>记录数</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+    <script>
+      const STORAGE_KEY = 'fanTrackerData'
+      function loadAll(){
+        const raw = localStorage.getItem(STORAGE_KEY)
+        return raw ? JSON.parse(raw) : {}
+      }
+      function computeSummary(data){
+        // accept array or object; coerce to array of records
+        let arr = []
+        if(Array.isArray(data)) arr = data.slice()
+        else if(data && typeof data === 'object') arr = Object.values(data)
+        const sorted = (arr||[]).slice().sort((a,b)=> (a.date||'').toString().localeCompare((b.date||'').toString()))
+        if(sorted.length===0) return {first:'-',last:'-',delta:0,count:0}
+        const first = sorted[0]
+        const last = sorted[sorted.length-1]
+        const firstFollowers = Number(first.followers||0)
+        const lastFollowers = Number(last.followers||0)
+        return {first:first.date || '-', last:last.date || '-', delta: lastFollowers - firstFollowers, count: sorted.length}
+      }
+      function render(){
+        const all = loadAll()
+        const tbody = document.querySelector('#adminTable tbody')
+        tbody.innerHTML = ''
+        Object.keys(all).forEach(user=>{
+          const s = computeSummary(all[user])
+          const tr = document.createElement('tr')
+          tr.innerHTML = `<td>${user}</td><td>${s.first}</td><td>${s.last}</td><td>${s.delta}</td><td>${s.count}</td>`
+          tbody.appendChild(tr)
+        })
+      }
+      document.getElementById('exportAllJson').addEventListener('click', ()=>{
+        const all = loadAll()
+        const blob = new Blob([JSON.stringify(all,null,2)], {type:'application/json'})
+        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='all-users.json'; a.click(); URL.revokeObjectURL(a.href)
+      })
+      document.getElementById('exportAllCsv').addEventListener('click', ()=>{
+        const all = loadAll()
+        const rows=[['用户名','首日','末日','粉丝增量','记录数']]
+        Object.keys(all).forEach(user=>{
+          const s = computeSummary(all[user])
+          rows.push([user,s.first,s.last,s.delta,s.count])
+        })
+        const csv = rows.map(r=>r.map(c=> String(c).includes(',')?`"${String(c).replace(/"/g,'""')}"`:c).join(',')).join('\n')
+        const BOM='\uFEFF'
+        const blob = new Blob([BOM+csv],{type:'text/csv;charset=utf-8'})
+        const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='users-summary.csv'; a.click(); URL.revokeObjectURL(a.href)
+      })
+      render()
+    </script>
+  </body>
+</html>
